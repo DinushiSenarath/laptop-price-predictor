@@ -460,7 +460,7 @@ with st.sidebar:
 st.markdown(
     """
     <div class="hero-box">
-        <div class="hero-title">Professional Laptop Price Predictor 💻</div>
+        <div class="hero-title">Laptop Price Predictor 💻</div>
         <div class="hero-subtitle">
             A machine learning web application that predicts laptop prices using hardware specifications,
             brand information, display features, processor details, storage type, and GPU information.
