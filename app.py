@@ -30,7 +30,7 @@ MAE_EURO = 167.48
 RMSE_EURO = 226.35
 MODEL_NAME = "XGBoost Regressor"
 GITHUB_URL = "https://github.com/DinushiSenarath/laptop-price-predictor"
-LINKEDIN_URL = "https://www.linkedin.com/"
+LINKEDIN_URL = "https://www.linkedin.com/in/dinushi-senarath-65643934b"
 APP_VERSION = "2.0"
 
 # -----------------------------
@@ -300,7 +300,7 @@ def validate_inputs(inputs):
     return warnings
 
 
-def get_similar_laptops(inputs, predicted_price, top_n=5):
+def get_similar_laptops(inputs, predicted_price, top_n=3):
     data = df.copy()
 
     data["score"] = 0.0
@@ -466,11 +466,12 @@ st.markdown(
             brand information, display features, processor details, storage type, and GPU information.
         </div>
         <br>
+        <span class="badge">Python</span>
+        <span class="badge">XGBoost</span>
+        <span class="badge">Scikit-Learn</span>
+        <span class="badge">Streamlit</span>
         <span class="badge">Machine Learning</span>
         <span class="badge">Regression</span>
-        <span class="badge">XGBoost</span>
-        <span class="badge">Streamlit</span>
-        <span class="badge">Portfolio Project</span>
         <span class="badge">R² Score: 0.8886</span>
     </div>
     """,
@@ -497,7 +498,11 @@ with d4:
     display_metric_card("Average Price", format_euro(df["Price_euros"].mean()), "Dataset mean")
 
 with d5:
-    display_metric_card("Median Price", format_euro(df["Price_euros"].median()), "Typical laptop price")
+    display_metric_card(
+        "Price Range",
+        f"{format_euro(df['Price_euros'].min())} - {format_euro(df['Price_euros'].max())}",
+        "Minimum to maximum"
+    )
 
 st.markdown("---")
 
@@ -591,6 +596,33 @@ if predict_button:
         category = get_price_category(predicted_price_euros)
 
     st.markdown("---")
+
+    # -----------------------------
+    # Hardware Summary (shown before the prediction result)
+    # -----------------------------
+    st.markdown("### 📋 Selected Hardware Summary")
+
+    summary_df = pd.DataFrame({
+        "Specification": [
+            "Brand", "Type", "Operating System", "CPU", "CPU Frequency", "RAM",
+            "GPU", "Storage", "Display", "Weight"
+        ],
+        "Selected Value": [
+            company,
+            product_type,
+            os,
+            f"{cpu_company} {cpu_model}",
+            f"{cpu_freq} GHz",
+            f"{ram} GB",
+            f"{gpu_company} {gpu_model}",
+            f"{primary_storage} GB {primary_storage_type} + {secondary_storage} GB {secondary_storage_type}",
+            f"{inches} inch, {screen_w}x{screen_h}, {screen}",
+            f"{weight} kg"
+        ]
+    })
+
+    st.table(summary_df)
+
     st.subheader("🎯 Prediction Result")
 
     if warnings:
@@ -606,6 +638,7 @@ if predict_button:
             "This configuration is reasonably represented in the dataset.</div>",
             unsafe_allow_html=True
         )
+        st.balloons()
 
     price_col1, price_col2 = st.columns(2)
 
@@ -642,6 +675,7 @@ if predict_button:
 
     with r2:
         display_metric_card("Confidence", f"{confidence_label} ({confidence_score}%)", "Based on model score and input rarity")
+        st.progress(confidence_score / 100)
 
     with r3:
         display_metric_card("Category", category, "Price segment")
@@ -649,31 +683,9 @@ if predict_button:
     with r4:
         display_metric_card("Model", "XGBoost", "Final selected algorithm")
 
-    st.markdown("### 📋 Selected Hardware Summary")
-
-    summary_df = pd.DataFrame({
-        "Specification": [
-            "Brand", "Type", "Operating System", "CPU", "CPU Frequency", "RAM",
-            "GPU", "Storage", "Display", "Weight"
-        ],
-        "Selected Value": [
-            company,
-            product_type,
-            os,
-            f"{cpu_company} {cpu_model}",
-            f"{cpu_freq} GHz",
-            f"{ram} GB",
-            f"{gpu_company} {gpu_model}",
-            f"{primary_storage} GB {primary_storage_type} + {secondary_storage} GB {secondary_storage_type}",
-            f"{inches} inch, {screen_w}x{screen_h}, {screen}",
-            f"{weight} kg"
-        ]
-    })
-
-    st.table(summary_df)
-
     st.markdown("### 🔎 Similar Laptops from Dataset")
-    similar_laptops = get_similar_laptops(inputs, predicted_price_euros)
+    st.caption("The three closest matches from the training data, based on hardware similarity and predicted price.")
+    similar_laptops = get_similar_laptops(inputs, predicted_price_euros, top_n=3)
 
     similar_laptops_display = similar_laptops.copy()
     similar_laptops_display["Price_euros"] = similar_laptops_display["Price_euros"].apply(format_euro)
@@ -703,10 +715,10 @@ if predict_button:
 st.markdown("---")
 st.subheader("🧠 Model Performance & Comparison")
 
-m1, m2, m3, m4 = st.columns(4)
+m1, m2, m3, m4, m5, m6 = st.columns(6)
 
 with m1:
-    display_metric_card("Final Model", "XGBoost", "Gradient boosted trees")
+    display_metric_card("Algorithm", "XGBoost", "Gradient boosted trees")
 
 with m2:
     display_metric_card("R² Score", f"{R2_SCORE:.4f}", "Explains about 89% variation")
@@ -716,6 +728,12 @@ with m3:
 
 with m4:
     display_metric_card("RMSE", format_euro(RMSE_EURO), "Penalizes large errors")
+
+with m5:
+    display_metric_card("Training Samples", f"{len(df):,}", "Rows used to fit the model")
+
+with m6:
+    display_metric_card("Features Used", f"{df.shape[1] - 2}", "Excludes Price and Product")
 
 with st.expander("🔍 Why XGBoost was selected"):
     st.write(
@@ -765,13 +783,42 @@ with about_col2:
     )
 
 # -----------------------------
+# Technology Stack
+# -----------------------------
+st.markdown("---")
+st.subheader("🛠️ Technology Stack")
+
+tech_stack = [
+    ("🐍", "Python", "Core programming language"),
+    ("🐼", "Pandas", "Data manipulation and analysis"),
+    ("🔢", "NumPy", "Numerical computing"),
+    ("🤖", "Scikit-Learn", "Preprocessing and pipelines"),
+    ("🚀", "XGBoost", "Gradient boosting regressor"),
+    ("📊", "Matplotlib", "Charts and visualizations"),
+    ("🎈", "Streamlit", "Web application framework"),
+]
+
+tech_cols = st.columns(len(tech_stack))
+for tech_col, (icon, name, description) in zip(tech_cols, tech_stack):
+    with tech_col:
+        st.markdown(
+            f"""
+            <div class="metric-card">
+                <div style="font-size:1.8rem;">{icon}</div>
+                <div class="metric-value" style="font-size:1.05rem;">{name}</div>
+                <div class="metric-caption">{description}</div>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+# -----------------------------
 # Footer
 # -----------------------------
 st.markdown(
     f"""
     <div class="footer">
         <h3>Developed by Dinushi Senarath</h3>
-        <p>Final Year Computer Engineering Undergraduate</p>
         <p>Machine Learning • Python • Scikit-learn • XGBoost • Streamlit</p>
         <p>
             <a href="{GITHUB_URL}" target="_blank">GitHub Repository</a>
