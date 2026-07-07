@@ -16,7 +16,6 @@ import time
 # -----------------------------
 st.set_page_config(
     page_title="Laptop Price Predictor",
-    page_icon="💻",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -31,7 +30,7 @@ RMSE_EURO = 226.35
 MODEL_NAME = "XGBoost Regressor"
 GITHUB_URL = "https://github.com/DinushiSenarath/laptop-price-predictor"
 LINKEDIN_URL = "https://www.linkedin.com/in/dinushi-senarath-65643934b"
-APP_VERSION = "2.0"
+
 
 # -----------------------------
 # Custom CSS
@@ -39,6 +38,8 @@ APP_VERSION = "2.0"
 st.markdown(
     """
     <style>
+    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css');
+    @import url('https://cdn.jsdelivr.net/npm/simple-icons-font@v11/font/simple-icons.min.css');
     .main {
         background-color: #0e1117;
     }
@@ -430,18 +431,33 @@ def display_metric_card(label, value, caption):
 # Sidebar
 # -----------------------------
 with st.sidebar:
-    st.title("💻 Project Info")
-    st.markdown("**Laptop Price Predictor v2.0**")
-    st.caption("Machine Learning Regression Web App")
+    st.markdown("""
+<h3>
+<i class="fa-solid fa-folder-open"></i>
+&nbsp;Project Info
+</h3>
+""", unsafe_allow_html=True)
+    st.markdown("Laptop Price Predictor ")
+    st.caption("Machine Learning Web Application")
 
     st.markdown("---")
-    st.markdown("### 🧠 Model")
+    st.markdown("""
+<h3>
+<i class="fa-solid fa-brain"></i>
+&nbsp;Model
+</h3>
+""", unsafe_allow_html=True)
     st.write(f"**Algorithm:** {MODEL_NAME}")
     st.write(f"**R² Score:** {R2_SCORE}")
     st.write(f"**MAE:** {format_euro(MAE_EURO)}")
 
     st.markdown("---")
-    st.markdown("### 🛠 Tech Stack")
+    st.markdown("""
+<h3>
+<i class="fa-solid fa-code"></i>
+&nbsp;Tech Stack
+</h3>
+""", unsafe_allow_html=True)
     st.write("Python")
     st.write("Pandas / NumPy")
     st.write("Scikit-learn")
@@ -450,7 +466,12 @@ with st.sidebar:
     st.write("Matplotlib")
 
     st.markdown("---")
-    st.markdown("### 🔗 Links")
+    st.markdown("""
+<h3>
+<i class="fa-solid fa-link"></i>
+&nbsp;Links
+</h3>
+""", unsafe_allow_html=True)
     st.markdown(f"[GitHub Repository]({GITHUB_URL})")
     st.markdown(f"[LinkedIn Profile]({LINKEDIN_URL})")
 
@@ -460,7 +481,7 @@ with st.sidebar:
 st.markdown(
     """
     <div class="hero-box">
-        <div class="hero-title">Laptop Price Predictor 💻</div>
+        <div class="hero-title">Laptop Price Predictor </div>
         <div class="hero-subtitle">
             A machine learning web application that predicts laptop prices using hardware specifications,
             brand information, display features, processor details, storage type, and GPU information.
@@ -481,7 +502,7 @@ st.markdown(
 # -----------------------------
 # Dataset Dashboard
 # -----------------------------
-st.subheader("📌 Dataset Overview")
+st.markdown('<h2><i class="fa-solid fa-database"></i> Dataset Overview</h2>', unsafe_allow_html=True)
 
 d1, d2, d3, d4, d5 = st.columns(5)
 
@@ -509,12 +530,12 @@ st.markdown("---")
 # -----------------------------
 # User Inputs
 # -----------------------------
-st.subheader("⚙️ Enter Laptop Specifications")
+st.markdown('<h2><i class="fa-solid fa-sliders"></i> Enter Laptop Specifications</h2>', unsafe_allow_html=True)
 
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    st.markdown("### 🖥️ Core Details")
+    st.markdown("###Core Details")
     company = st.selectbox("Brand", safe_sorted_unique(df, "Company"))
     product_type = st.selectbox("Laptop Type", safe_sorted_unique(df, "TypeName"))
     os = st.selectbox("Operating System", safe_sorted_unique(df, "OS"))
@@ -523,7 +544,7 @@ with col1:
     retina = st.selectbox("Retina Display", safe_sorted_unique(df, "RetinaDisplay"))
 
 with col2:
-    st.markdown("### ⚙️ Performance")
+    st.markdown("###  Performance")
     cpu_company = st.selectbox("CPU Brand", safe_sorted_unique(df, "CPU_company"))
     cpu_model = st.selectbox("CPU Model", safe_sorted_unique(df, "CPU_model"))
     cpu_freq = st.selectbox("CPU Frequency (GHz)", safe_sorted_unique(df, "CPU_freq"))
@@ -532,7 +553,7 @@ with col2:
     gpu_model = st.selectbox("GPU Model", safe_sorted_unique(df, "GPU_model"))
 
 with col3:
-    st.markdown("### 💾 Storage & Display")
+    st.markdown("###  Storage & Display")
     primary_storage = st.selectbox("Primary Storage (GB)", safe_sorted_unique(df, "PrimaryStorage"))
     primary_storage_type = st.selectbox("Primary Storage Type", safe_sorted_unique(df, "PrimaryStorageType"))
     secondary_storage = st.selectbox("Secondary Storage (GB)", safe_sorted_unique(df, "SecondaryStorage"))
@@ -578,7 +599,7 @@ inputs = {
     "IPSpanel": ips_panel,
 }
 
-predict_button = st.button("🚀 Predict Laptop Price")
+predict_button = st.button(" Predict Laptop Price")
 
 # -----------------------------
 # Prediction Output
@@ -600,7 +621,7 @@ if predict_button:
     # -----------------------------
     # Hardware Summary (shown before the prediction result)
     # -----------------------------
-    st.markdown("### 📋 Selected Hardware Summary")
+    st.markdown("###  Selected Hardware Summary")
 
     summary_df = pd.DataFrame({
         "Specification": [
@@ -623,8 +644,7 @@ if predict_button:
 
     st.table(summary_df)
 
-    st.subheader("🎯 Prediction Result")
-
+    st.markdown('<h2><i class="fa-solid fa-chart-line"></i> Prediction Result</h2>', unsafe_allow_html=True)
     if warnings:
         st.markdown(
             "<div class='warning-card'><b>⚠️ Prediction Reliability Notice</b><br>"
@@ -683,7 +703,7 @@ if predict_button:
     with r4:
         display_metric_card("Model", "XGBoost", "Final selected algorithm")
 
-    st.markdown("### 🔎 Similar Laptops from Dataset")
+    st.markdown('<h2><i class="fa-solid fa-magnifying-glass-chart"></i> Similar Laptops from Dataset</h2>', unsafe_allow_html=True)
     st.caption("The three closest matches from the training data, based on hardware similarity and predicted price.")
     similar_laptops = get_similar_laptops(inputs, predicted_price_euros, top_n=3)
 
@@ -703,7 +723,7 @@ if predict_button:
     st.dataframe(similar_laptops_display, use_container_width=True, hide_index=True)
 
     st.markdown("---")
-    st.subheader("📊 Feature Importance")
+    st.markdown('<h2><i class="fa-solid fa-ranking-star"></i> Feature Importance</h2>', unsafe_allow_html=True)
 
     fig_importance = plot_feature_importance(model)
     if fig_importance:
@@ -713,8 +733,7 @@ if predict_button:
 # Model Comparison
 # -----------------------------
 st.markdown("---")
-st.subheader("🧠 Model Performance & Comparison")
-
+st.markdown('<h2><i class="fa-solid fa-brain"></i> Model Performance & Comparison</h2>', unsafe_allow_html=True)
 m1, m2, m3, m4, m5, m6 = st.columns(6)
 
 with m1:
@@ -735,7 +754,7 @@ with m5:
 with m6:
     display_metric_card("Features Used", f"{df.shape[1] - 2}", "Excludes Price and Product")
 
-with st.expander("🔍 Why XGBoost was selected"):
+with st.expander(" Why XGBoost was selected"):
     st.write(
         "Several regression models were tested. XGBoost was selected because it gave the best balance "
         "between accuracy and ability to model complex relationships between laptop specifications and price."
@@ -749,7 +768,7 @@ with st.expander("🔍 Why XGBoost was selected"):
 # Project Explanation
 # -----------------------------
 st.markdown("---")
-st.subheader("📌 About This Project")
+st.markdown('<h2><i class="fa-solid fa-circle-info"></i> About This Project</h2>', unsafe_allow_html=True)
 
 about_col1, about_col2 = st.columns(2)
 
@@ -786,16 +805,36 @@ with about_col2:
 # Technology Stack
 # -----------------------------
 st.markdown("---")
-st.subheader("🛠️ Technology Stack")
+st.markdown('<h2><i class="fa-solid fa-code"></i> Technology Stack</h2>', unsafe_allow_html=True)
 
 tech_stack = [
-    ("🐍", "Python", "Core programming language"),
-    ("🐼", "Pandas", "Data manipulation and analysis"),
-    ("🔢", "NumPy", "Numerical computing"),
-    ("🤖", "Scikit-Learn", "Preprocessing and pipelines"),
-    ("🚀", "XGBoost", "Gradient boosting regressor"),
-    ("📊", "Matplotlib", "Charts and visualizations"),
-    ("🎈", "Streamlit", "Web application framework"),
+    ('<i class="si si-python" style="font-size:36px;color:#4FA3FF;"></i>',
+     "Python",
+     "Core programming language"),
+
+    ('<i class="si si-pandas" style="font-size:36px;color:#B06CFF;"></i>',
+     "Pandas",
+     "Data manipulation and analysis"),
+
+    ('<i class="si si-numpy" style="font-size:36px;color:#4DABCF;"></i>',
+     "NumPy",
+     "Numerical computing"),
+
+    ('<i class="si si-scikitlearn" style="font-size:36px;color:#F7931E;"></i>',
+     "Scikit-Learn",
+     "Preprocessing and pipelines"),
+
+    ('<i class="fa-solid fa-chart-line" style="font-size:34px;color:#4CAF50;"></i>',
+     "XGBoost",
+     "Gradient boosting regressor"),
+
+    ('<i class="fa-solid fa-chart-column" style="font-size:34px;color:#2196F3;"></i>',
+     "Matplotlib",
+     "Charts and visualizations"),
+
+    ('<i class="si si-streamlit" style="font-size:36px;color:#FF4B4B;"></i>',
+     "Streamlit",
+     "Web application framework"),
 ]
 
 tech_cols = st.columns(len(tech_stack))
@@ -804,7 +843,7 @@ for tech_col, (icon, name, description) in zip(tech_cols, tech_stack):
         st.markdown(
             f"""
             <div class="metric-card">
-                <div style="font-size:1.8rem;">{icon}</div>
+                <div>{icon}</div>
                 <div class="metric-value" style="font-size:1.05rem;">{name}</div>
                 <div class="metric-caption">{description}</div>
             </div>
@@ -819,13 +858,13 @@ st.markdown(
     f"""
     <div class="footer">
         <h3>Developed by Dinushi Senarath</h3>
-        <p>Machine Learning • Python • Scikit-learn • XGBoost • Streamlit</p>
+        <p>Built with Python • Scikit-Learn • XGBoost • Streamlit</p>
         <p>
             <a href="{GITHUB_URL}" target="_blank">GitHub Repository</a>
             &nbsp; | &nbsp;
             <a href="{LINKEDIN_URL}" target="_blank">LinkedIn</a>
         </p>
-        <p class="small-muted">Laptop Price Predictor v{APP_VERSION}</p>
+        <p class="small-muted">Laptop Price Predictor</p>
     </div>
     """,
     unsafe_allow_html=True
