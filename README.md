@@ -41,19 +41,25 @@ The final model predicts laptop prices based on user-selected hardware specifica
 
 ---
 
-# 📊 Dataset
+## 📊 Dataset
 
-**Source**
+This project uses the **Laptop Prices** dataset from Kaggle.
 
-Laptop Price Dataset (Kaggle)
+- **Processed Dataset**
+  https://www.kaggle.com/datasets/owm4096/laptop-prices
 
- https://www.kaggle.com/code/owm4096/laptop-prices-eda-w-ml-models-91-8-high
+- **Original Dataset**
+  https://www.kaggle.com/datasets/muhammetvarl/laptop-price
 
-| Property  | Value |
+### Dataset Summary
+
+| Property | Value |
 |-----------|------:|
-| Records   | 1275 |
-| Features  | 22 |
-| Target    | Price (Euros) |
+| Records | 1275 |
+| Features | 23 |
+| Target Variable | Price_euros |
+
+The processed dataset separates hardware specifications into individual columns (CPU company, CPU model, GPU company, GPU model, storage details, etc.), making it more suitable for machine learning.
 
 ---
 
