@@ -47,7 +47,7 @@ The final model predicts laptop prices based on user-selected hardware specifica
 
 Laptop Price Dataset (Kaggle)
 
-https://www.kaggle.com/datasets/ionaskel/laptop-prices
+ https://www.kaggle.com/datasets/muhammetvarl/laptop-price/
 
 | Property  | Value |
 |-----------|------:|
