@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import time
 
 # ============================================================
-# Laptop Price Predictor v2.0 - Portfolio Edition
+# Laptop Price Predictor  - Portfolio Edition
 # Author: Dinushi Senarath
 # ============================================================
 
@@ -658,7 +658,7 @@ if predict_button:
             "This configuration is reasonably represented in the dataset.</div>",
             unsafe_allow_html=True
         )
-        st.balloons()
+       
 
     price_col1, price_col2 = st.columns(2)
 
